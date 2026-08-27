@@ -1,0 +1,57 @@
+{
+  "_comment": "Fill in every value. Then run: python3 gen_banner.py  (regenerates dark.svg + light.svg and README.md)",
+  "name": "Mohamed Ahmed Fekry",
+  "username": "Kiramido1",
+  "role": "Penetration Tester · Security QA",
+  "location": "Cairo, Egypt",
+  "education": "B.Sc. Cybersecurity, HITU '26",
+  "status": "Hacking + Testing + Shipping",
+  "toolchain": "Burp, Nmap, Metasploit, Postman",
+  "languages": "Python, Bash, SQL, JS, C++",
+  "frontend": "Vue.js, HTML, CSS",
+  "backend": "Django, Laravel, REST APIs",
+  "database": "PostgreSQL, SQL",
+  "infra": "Kali Linux, Docker, Git, CI/CD",
+  "email": "mohamedahmedfekry2003@gmail.com",
+  "portfolio": "my-portfolio-virid-nine-95.vercel.app",
+  "linkedin": "https://www.linkedin.com/in/mohamed-ahmed-fekry/",
+  "instagram": "https://www.instagram.com/YOUR-HANDLE/",
+  "facebook": "https://www.facebook.com/YOUR-ID/",
+  "stats_instance": "https://YOUR-INSTANCE.vercel.app",
+  "logos": [
+    {
+      "label": "</>",
+      "image": null
+    },
+    {
+      "label": ">_",
+      "image": null
+    },
+    {
+      "label": "{ }",
+      "image": null
+    }
+  ],
+  "_logos_help": "Set \"image\" to a path of a PNG (dark logo on white/transparent background, e.g. logos/flutter.png) to trace a real logo instead of the text glyph.",
+  "photo": "../../WhatsApp Image 2026-08-28 at 1.58.06 AM.jpeg",
+  "crop": {
+    "top": 40,
+    "bottom": 1010,
+    "left": 0,
+    "right": 853
+  },
+  "palette": {
+    "portrait_dark": "#A78BFA",
+    "portrait_light": "#7C3AED",
+    "chrome_dark": "#22D3EE",
+    "chrome_light": "#0891B2",
+    "accent": "#10B981",
+    "bg": "#0A101F",
+    "bg_light": "#F8FAFC",
+    "text_dim": "#94A3B8",
+    "text_dim_light": "#475569",
+    "text": "#F8FAFC",
+    "text_light": "#0F172A",
+    "live": "#EF4444"
+  }
+}
