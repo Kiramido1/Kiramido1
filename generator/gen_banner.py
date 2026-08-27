@@ -369,7 +369,6 @@ def build_readme():
 <img width="49%" src="{inst}/api/top-langs/?username={u}&layout=compact&langs_count=8&hide_border=true&title_color={P['chrome_dark']}&text_color={P['text_dim']}&bg_color={P['bg']}&card_width=500" alt="top langs" />
 </div>
 
-<!-- SNAKE: uncomment this block ONLY after the "Generate Snake Animation" action has run green once (the `output` branch must exist).
 <div align="center">
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/{u}/{u}/output/github-snake-dark.svg" />
@@ -377,7 +376,6 @@ def build_readme():
   <img alt="Snake eating my contributions" src="https://raw.githubusercontent.com/{u}/{u}/output/github-snake.svg" />
 </picture>
 </div>
--->
 
 <div align="center">
 {badges}
