@@ -1,7 +1,7 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Kiramido1/Kiramido1/main/dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Kiramido1/Kiramido1/main/light.svg">
-  <img alt="Mohamed Ahmed Fekry — Penetration Tester · Security QA" src="https://raw.githubusercontent.com/Kiramido1/Kiramido1/main/light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Kiramido1/Kiramido1/main/invaders-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Kiramido1/Kiramido1/main/invaders-light.svg">
+  <img alt="Space Invaders — animated" src="https://raw.githubusercontent.com/Kiramido1/Kiramido1/main/invaders-light.svg">
 </picture>
 
 <div align="center">
