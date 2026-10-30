@@ -27,17 +27,6 @@ I break web applications and APIs before attackers do, and build the automation 
 - **AI-assisted testing**: LLM-generated test plans executed by sandboxed agents against live, disposable environments.
 - **Education**: B.Sc. in Cybersecurity, HITU (class of 2026) · Cairo, Egypt.
 
-## Featured Projects
-
-| Project | Summary | Stack |
-|---|---|---|
-| **[PRQA · PR QA Pilot](https://github.com/Kiramido1/PRQA)** | Label a pull request and it is tested automatically against a disposable copy of its own API. An LLM writes the QA plan, a rubric gate scores it, Claude Code executes it inside a bubblewrap sandbox, and every defect is reported to Discord. | Python · n8n · Docker · PostgreSQL · Groq · Claude Code |
-| **[QA Autopilot](https://github.com/Kiramido1/qa-autopilot)** | Autonomous AI QA skill: repository reconnaissance, test design, Selenium E2E automation, API integration testing, failure analysis and risk-based regression. | Python · Selenium · LLM agents |
-| **[Amenly](https://github.com/Kiramido1/Amenly-Product)** | Backend for an AI-driven compliance and cyber-risk platform for SMEs: organizations, RBAC, subscriptions, and risk scoring mapped to ISO 27001, NIST and GDPR. | Python · REST API · PostgreSQL |
-| **[NetSentinel](https://github.com/Kiramido1/NetSentinel)** | Wi-Fi security monitoring and controlled penetration-testing tool. | Python · Networking |
-| **[ANUBIS](https://github.com/Kiramido1/ANUBIS-Encryption-Algorithm-)** | Custom symmetric cipher: hieroglyph mapping, key-based permutation, modular transformation and bit shifts, with full encryption and decryption. | Python · Cryptography |
-| **[Green Vision](https://github.com/Kiramido1/front-green-vision)** | NASA Space Apps Challenge 2025 project: climate forecasting, drought prediction, NDVI vegetation analysis and urban heat maps. | Web · AI · Geospatial data |
-
 ## Technical Skills
 
 <table>
