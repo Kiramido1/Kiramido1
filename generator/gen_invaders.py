@@ -9,7 +9,7 @@ A scripted, looping game rendered with SVG SMIL animations (works inside <img>/<
 
 Run:  cd generator && python3 gen_invaders.py
 """
-import json, math, os, random
+import json, math, os, random, re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)
@@ -23,30 +23,43 @@ FX, FY, FW, FH = PAD, TITLE_H + PAD, W - 2 * PAD, H - TITLE_H - 2 * PAD   # game
 PX = 4                      # sprite pixel size
 LOOP = 18.0                 # seconds
 STEP = 0.45                 # formation step period
-ROWS, COLS = 5, 11
-CELL_W, CELL_H = 62, 44
-FORM_X0, FORM_Y0 = FX + 60, FY + 112
+ROWS, COLS = 5, 9
+CELL_W, CELL_H = 78, 50
+ICON = 34                   # target icon size (px)
+FORM_X0, FORM_Y0 = FX + 60, FY + 118
 DX, DY = 14, 10
 PLAYER_Y = FY + FH - 62     # top of the player sprite
 GROUND_Y = FY + FH - 22
 BULLET_V = 820.0            # px/s
-PLAYER_V = 950.0            # px/s
+PLAYER_V = 620.0            # px/s
 
-S = {
-    "squid": (["...##...", "..####..", ".######.", "##.##.##", "########", "..#..#..", ".#.##.#.", "#.#..#.#"],
-              ["...##...", "..####..", ".######.", "##.##.##", "########", ".#.##.#.", "#......#", ".#....#."]),
-    "crab": (["..#.....#..", "...#...#...", "..#######..", ".##.###.##.", "###########", "#.#######.#", "#.#.....#.#", "...##.##..."],
-             ["..#.....#..", "#..#...#..#", "#.#######.#", "###.###.###", "###########", ".#########.", "..#.....#..", ".#.......#."]),
-    "octo": (["....####....", ".##########.", "############", "###..##..###", "############", "...##..##...", "..##.##.##..", "##........##"],
-             ["....####....", ".##########.", "############", "###..##..###", "############", "..###..###..", ".##..##..##.", "..##....##.."]),
-}
+# targets: one row per category, icons vendored from simple-icons (assets/icons/<slug>.svg)
+ICON_ROWS = [
+    ["burpsuite", "metasploit", "kalilinux", "owasp", "wireshark", "hackthebox", "tryhackme", "parrotsecurity", "virustotal"],
+    ["torproject", "snyk", "openvpn", "wireguard", "letsencrypt", "hashicorp", "sonarqube", "nginx", "linux"],
+    ["python", "javascript", "typescript", "cplusplus", "gnubash", "php", "go", "rust", "c"],
+    ["postgresql", "mysql", "openjdk", "ruby", "lua", "html5", "css3", "django", "laravel"],
+    ["docker", "kubernetes", "git", "githubactions", "jenkins", "postman", "selenium", "n8n", "vuedotjs"],
+]
+NAME_FIX = {"openjdk": "Java", "gnubash": "Bash", "cplusplus": "C++", "githubactions": "GH Actions", "css3": "CSS",
+            "html5": "HTML", "parrotsecurity": "Parrot OS", "hashicorp": "HashiCorp", "letsencrypt": "Let's Encrypt",
+            "torproject": "Tor", "kalilinux": "Kali Linux", "burpsuite": "Burp Suite", "hackthebox": "Hack The Box"}
+
+
+def load_icon(slug):
+    raw = open(os.path.join(HERE, "assets", "icons", slug + ".svg")).read()
+    d = re.search(r'<path d="([^"]+)"', raw).group(1)
+    title = re.search(r"<title>(.*?)</title>", raw).group(1).replace("&amp;", "&")
+    return d, NAME_FIX.get(slug, title)
+
+
+ICONS = {slug: load_icon(slug) for row in ICON_ROWS for slug in row}
 PLAYER = ["......#......", ".....###.....", ".....###.....", ".###########.", "#############",
           "#############", "#############", "#############"]
 BOOM = ["....#...#....", ".#..#...#..#.", "..#.......#..", "...#.....#...", "##.........##",
         "...#.....#...", "..#.......#..", ".#..#...#..#.", "....#...#...."]
 UFO = [".....######.....", "...##########...", "..############..", ".##.##.##.##.##.",
        "################", "..###..##..###..", "...#........#..."]
-ROW_KIND = ["squid", "crab", "crab", "octo", "octo"]
 ROW_PTS = [30, 20, 20, 10, 10]
 
 
@@ -93,7 +106,7 @@ def window(t0, t1):
 
 # ------------------------------------------------------------- formation path (one offset per step)
 NSTEP = int(round(LOOP / STEP))
-alien_span = (COLS - 1) * CELL_W + sw(S["octo"][0])
+alien_span = (COLS - 1) * CELL_W + ICON
 max_dx = (FX + FW - 40) - (FORM_X0 + alien_span)
 offs, ox, oy, dirn = [], 0, 0, 1
 for k in range(NSTEP):
@@ -108,14 +121,12 @@ def form_off(t): return offs[min(int(t / STEP), NSTEP - 1)]
 
 
 def alien_local(r, c):
-    kind = ROW_KIND[r]
-    x = c * CELL_W + (sw(S["octo"][0]) - sw(S[kind][0])) / 2
-    return x, r * CELL_H
+    return c * CELL_W, r * CELL_H
 
 
 def alien_world_center(r, c, t):
     x, y = alien_local(r, c); o = form_off(t)
-    return FORM_X0 + o[0] + x + sw(S[ROW_KIND[r]][0]) / 2, FORM_Y0 + o[1] + y + 8 * PX
+    return FORM_X0 + o[0] + x + ICON / 2, FORM_Y0 + o[1] + y + ICON
 
 
 # ------------------------------------------------------------- kill schedule
@@ -178,11 +189,8 @@ def build(dark):
          f'viewBox="0 0 {W} {H}" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,\'Liberation Mono\',monospace">']
     # defs: 2-frame sprites
     o.append("<defs>")
-    for kind, (f1, f2) in S.items():
-        o.append(f'<g id="{kind}"><path d="{sprite_path(f1)}">'
-                 f'<animate attributeName="opacity" values="1;0" dur="{2 * STEP}s" repeatCount="indefinite" calcMode="discrete"/></path>'
-                 f'<path d="{sprite_path(f2)}" opacity="0">'
-                 f'<animate attributeName="opacity" values="0;1" dur="{2 * STEP}s" repeatCount="indefinite" calcMode="discrete"/></path></g>')
+    for slug, (d, _) in ICONS.items():
+        o.append(f'<symbol id="i_{slug}" viewBox="0 0 24 24"><path d="{d}"/></symbol>')
     o.append(f'<path id="boom" d="{sprite_path(BOOM, 4)}"/>')
     o.append(f'<path id="ship" d="{sprite_path(PLAYER)}"/>')
     o.append(f'<path id="ship_s" d="{sprite_path(PLAYER, 2)}"/>')
@@ -198,7 +206,7 @@ def build(dark):
         o.append(f'<circle cx="{20 + 20 * i}" cy="18" r="6" fill="{c}"/>')
     o.append(f'<text x="{W / 2}" y="23" text-anchor="middle" font-size="13" fill="{dim}">invaders.sh --live</text>')
     o.append(f'<rect x="{FX}" y="{FY}" width="{FW}" height="{FH}" rx="8" fill="{panel}" stroke="{border}"/>')
-    o.append(f'<text x="{FX + 14}" y="{FY + 20}" font-size="13" fill="{chrome}" letter-spacing="1">ARCADE.SIM</text>')
+    o.append(f'<text x="{FX + 14}" y="{FY + 20}" font-size="13" fill="{chrome}" letter-spacing="1">TARGETS: LANGS + SEC TOOLS</text>')
     lx = FX + FW - 74
     o.append(f'<rect x="{lx}" y="{FY + 7}" width="60" height="18" rx="9" fill="{live}" fill-opacity="0.15" stroke="{live}"/>')
     o.append(f'<circle cx="{lx + 13}" cy="{FY + 16}" r="3" fill="{live}"><animate attributeName="opacity" values="1;0.2;1" dur="1.4s" repeatCount="indefinite"/></circle>')
@@ -242,13 +250,26 @@ def build(dark):
     o.append(f'<g transform="translate({FORM_X0} {FORM_Y0})"><g>')
     o.append(f'<animateTransform attributeName="transform" type="translate" calcMode="discrete" dur="{LOOP}s" repeatCount="indefinite" '
              f'values="{";".join(f"{a} {b}" for a, b in tv)}" keyTimes="{";".join(kt(i * STEP) for i in range(NSTEP))}"/>')
+    # icons bob 3px on every formation step, like the classic 2-frame march
+    o.append(f'<g><animateTransform attributeName="transform" type="translate" values="0 0;0 -3" dur="{2 * STEP}s" '
+             f'repeatCount="indefinite" calcMode="discrete"/>')
     for r in range(ROWS):
         for c in range(COLS):
             x, y = alien_local(r, c); th = kill_t[(r, c)]
-            o.append(f'<use href="#{ROW_KIND[r]}" xlink:href="#{ROW_KIND[r]}" x="{x:.0f}" y="{y}" fill="{row_col[r]}">'
-                     f'{anim("opacity", [1, 0], [0, th])}</use>')
-            bx = x + sw(S[ROW_KIND[r]][0]) / 2 - sw(BOOM) / 2
-            o.append(f'<use href="#boom" xlink:href="#boom" x="{bx:.0f}" y="{y - 2}" fill="{text}" opacity="0">{window(th, th + 0.22)}</use>')
+            slug = ICON_ROWS[r][c]
+            o.append(f'<use href="#i_{slug}" xlink:href="#i_{slug}" x="{x}" y="{y}" width="{ICON}" height="{ICON}" fill="{row_col[r]}">'
+                     f'<title>{ICONS[slug][1]}</title>{anim("opacity", [1, 0], [0, th])}</use>')
+    o.append("</g>")
+    for r in range(ROWS):
+        for c in range(COLS):
+            x, y = alien_local(r, c); th = kill_t[(r, c)]
+            bx = x + ICON / 2 - sw(BOOM) / 2
+            o.append(f'<use href="#boom" xlink:href="#boom" x="{bx:.0f}" y="{y}" fill="{text}" opacity="0">{window(th, th + 0.22)}</use>')
+            name = ICONS[ICON_ROWS[r][c]][1].upper().replace("&", "&amp;").replace("'", "&#39;")
+            o.append(f'<text x="{x + ICON / 2}" y="{y + 8}" text-anchor="middle" font-size="12" font-weight="700" fill="{row_col[r]}" '
+                     f'letter-spacing="1" opacity="0">{name} +{ROW_PTS[r]}{window(th + 0.05, th + 0.75)}'
+                     f'<animate attributeName="y" values="{y + 8};{y + 8};{y - 18};{y - 18}" keyTimes="0;{kt(th + 0.05)};{kt(th + 0.75)};1" '
+                     f'dur="{LOOP}s" repeatCount="indefinite"/></text>')
     o.append("</g></g>")
 
     # bullets
@@ -291,7 +312,7 @@ def build(dark):
     o.append(f'<g opacity="0">{window(T_CLEAR, LOOP - 0.15)}'
              f'<text x="{W / 2}" y="{cy}" text-anchor="middle" font-size="26" fill="{chrome}" letter-spacing="6">WAVE CLEARED</text>'
              f'<text x="{W / 2}" y="{cy + 32}" text-anchor="middle" font-size="14" fill="{dim}" letter-spacing="2">'
-             f'$ ./next_wave --target=prod_</text></g>')
+             f'$ all targets pwned · {ROWS * COLS}/{ROWS * COLS}</text></g>')
     o.append("</g></svg>")
     return "\n".join(o)
 
