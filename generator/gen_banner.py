@@ -388,5 +388,8 @@ if __name__ == "__main__":
         svg = build_svg(mode, dots, CFG["logos"])
         open(os.path.join(OUT, fn), "w").write(svg)
         print(f"wrote {fn}  {os.path.getsize(os.path.join(OUT, fn)) / 1024:.0f} KB")
-    open(os.path.join(OUT, "README.md"), "w").write(build_readme())
-    print("wrote README.md")
+    # README.md is maintained by hand; regenerate the template only on request
+    import sys
+    if "--readme" in sys.argv:
+        open(os.path.join(OUT, "README.md"), "w").write(build_readme())
+        print("wrote README.md")
