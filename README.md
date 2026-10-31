@@ -1,7 +1,7 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Kiramido1/Kiramido1/main/invaders-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Kiramido1/Kiramido1/main/invaders-light.svg">
-  <img alt="Space Invaders — shooting down languages and security tools" src="https://raw.githubusercontent.com/Kiramido1/Kiramido1/main/invaders-light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Kiramido1/Kiramido1/main/invaders-dark.svg?v=4">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Kiramido1/Kiramido1/main/invaders-light.svg?v=4">
+  <img alt="Space Invaders — shooting down languages and security tools" src="https://raw.githubusercontent.com/Kiramido1/Kiramido1/main/invaders-light.svg?v=4">
 </picture>
 
 <div align="center">
