@@ -29,7 +29,7 @@ HDR = 32                                          # panel header strip
 LOOP = 18.0
 STEP = 0.45
 ROWS, COLS = 5, 9
-TILE, ICON = 44, 26
+TILE, ICON = 40, 36
 CELL_W, CELL_H = 70, 54
 DX, DY = 12, 12
 form_w = (COLS - 1) * CELL_W + TILE
@@ -287,8 +287,6 @@ def build(dark):
             x, y = alien_local(r, c); th = kill_t[(r, c)]; slug = ICON_ROWS[r][c]
             io = (TILE - ICON) / 2
             A(f'<g opacity="0">{anim("opacity", [0, 1, 0], [0, appear_t(r, c), th])}<title>{esc(ICONS[slug][1])}</title>'
-              f'<rect x="{x}" y="{y}" width="{TILE}" height="{TILE}" rx="11" fill="{col}" fill-opacity="{0.10 if dark else 0.08}" '
-              f'stroke="{col}" stroke-opacity="0.65" stroke-width="1.5"/>'
               f'<use href="#i_{slug}" xlink:href="#i_{slug}" x="{x + io}" y="{y + io}" width="{ICON}" height="{ICON}" fill="{col}"/></g>')
     A("</g>")
     # hit effects (ride with the formation, no bob)
@@ -297,7 +295,7 @@ def build(dark):
         for c in range(COLS):
             x, y = alien_local(r, c); th = kill_t[(r, c)]
             cx, cy = x + TILE / 2, y + TILE / 2
-            A(f'<rect x="{x}" y="{y}" width="{TILE}" height="{TILE}" rx="11" fill="{"#FFFFFF" if dark else col}" opacity="0">{window(th, th + 0.07)}</rect>')
+            A(f'<circle cx="{cx}" cy="{cy}" r="16" fill="{"#FFFFFF" if dark else col}" opacity="0">{window(th, th + 0.07)}</circle>')
             A(f'<circle cx="{cx}" cy="{cy}" r="6" fill="none" stroke="{col}" stroke-width="3" opacity="0">'
               f'{window(th, th + 0.4)}{pulse("r", th, th + 0.4, 6, 34)}{pulse("stroke-width", th, th + 0.4, 4, 0.5)}</circle>')
             parts = []
